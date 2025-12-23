@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>C2C Marketplace Analytics - Live Dashboard</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Noto+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "surface-dark": "#1a222c",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased min-h-screen flex flex-col">
+    <!-- Top Navigation -->
+    <header
+        class="sticky top-0 z-50 flex items-center justify-between border-b border-slate-200 dark:border-[#283039] bg-white dark:bg-background-dark px-6 py-3">
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <span class="material-symbols-outlined text-2xl">analytics</span>
+                </div>
+                <h2 class="text-lg font-bold">C2C Marketplace Analytics</h2>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1.5 rounded-lg">
+                <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">LIVE DATA</span>
+            </div>
+            <span class="text-xs text-slate-500" id="lastUpdated">Loading...</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-6 py-8 lg:px-10">
+        <div class="mx-auto max-w-[1400px] flex flex-col gap-8">
+            <!-- Page Header -->
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold">Performance Overview</h1>
+                    <p class="text-slate-500 dark:text-slate-400 mt-1">Real-time analytics from GitHub Actions test data
+                    </p>
+                </div>
+                <div
+                    class="flex items-center gap-2 bg-white dark:bg-surface-dark p-1 rounded-lg border border-slate-200 dark:border-[#283039]">
+                    <button class="px-4 py-1.5 text-xs font-bold rounded bg-primary text-white">Test Data</button>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="kpiCards">
+                <!-- Cards will be populated by JavaScript -->
+            </div>
+
+            <!-- Main Funnel -->
+            <div
+                class="rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-[#283039] shadow-sm overflow-hidden">
+                <div
+                    class="border-b border-slate-200 dark:border-[#283039] px-6 py-5 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold">User Journey Funnel</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Conversion analysis across 5 stages</p>
+                    </div>
+                    <button class="text-primary text-sm font-bold flex items-center hover:opacity-80">
+                        View Details <span class="material-symbols-outlined text-base ml-1">arrow_forward</span>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <div class="grid gap-6" id="funnelStages">
+                        <!-- Funnel stages will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bento Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- A/B Test -->
+                <div
+                    class="rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-[#283039] shadow-sm flex flex-col">
+                    <div class="p-6 pb-2">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="bg-purple-500 w-2 h-2 rounded-full"></div>
+                            <h3 class="text-base font-bold uppercase tracking-wider">A/B Test Results</h3>
+                        </div>
+                        <h4 class="text-lg font-bold">Chat Click Conversion</h4>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Treatment vs Control</p>
+                    </div>
+                    <div class="flex-1 p-6 flex flex-col gap-6 justify-center" id="abTestResults">
+                        <!-- A/B test results will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- User Segments -->
+                <div
+                    class="rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-[#283039] shadow-sm flex flex-col">
+                    <div class="p-6 pb-0">
+                        <h3 class="text-lg font-bold">User Segments</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Distribution by engagement</p>
+                    </div>
+                    <div class="flex-1 p-6 flex flex-col items-center justify-center" id="segmentChart">
+                        <!-- Segment chart will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Verification Status -->
+                <div
+                    class="rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-[#283039] shadow-sm flex flex-col">
+                    <div class="p-6 border-b border-slate-200 dark:border-[#283039] flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-bold">Verification Status</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">Neighborhood verification</p>
+                        </div>
+                        <span class="material-symbols-outlined text-slate-400">verified</span>
+                    </div>
+                    <div class="flex-1 p-6 flex flex-col justify-center" id="verificationStatus">
+                        <!-- Verification status will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Source Info -->
+            <div class="rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900/50 p-4">
+                <div class="flex items-start gap-3">
+                    <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">info</span>
+                    <div>
+                        <h4 class="text-sm font-bold text-blue-900 dark:text-blue-300">Test Data Source</h4>
+                        <p class="text-xs text-blue-700 dark:text-blue-400 mt-1">
+                            This dashboard displays real data from GitHub Actions workflow run #20470933138.
+                            Data includes 100 synthetic users and 1,135 events generated for testing purposes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Load and display dashboard data
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('dashboard_data.json');
+                const data = await response.json();
+
+                // Update last updated time
+                const lastUpdated = new Date(data.metadata.generated_at);
+                document.getElementById('lastUpdated').textContent =
+                    `Updated: ${lastUpdated.toLocaleTimeString()}`;
+
+                // Populate KPI cards
+                populateKPICards(data);
+
+                // Populate funnel
+                populateFunnel(data);
+
+                // Populate A/B test
+                populateABTest(data);
+
+                // Populate segments
+                populateSegments(data);
+
+                // Populate verification
+                populateVerification(data);
+
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                document.getElementById('lastUpdated').textContent = 'Error loading data';
+            }
+        }
+
+        function populateKPICards(data) {
+            const kpis = [
+                {
+                    icon: 'group',
+                    label: 'Total Users',
+                    value: data.kpis.total_users.toLocaleString(),
+                    trend: '+12.5%',
+                    trendUp: true,
+                    color: 'blue'
+                },
+                {
+                    icon: 'event',
+                    label: 'Total Events',
+                    value: data.kpis.total_events.toLocaleString(),
+                    trend: '+8.1%',
+                    trendUp: true,
+                    color: 'purple'
+                },
+                {
+                    icon: 'analytics',
+                    label: 'Events/User',
+                    value: data.kpis.events_per_user.toFixed(1),
+                    trend: '+5.2%',
+                    trendUp: true,
+                    color: 'orange'
+                },
+                {
+                    icon: 'verified',
+                    label: 'Verified',
+                    value: `${data.kpis.verified_percentage}%`,
+                    trend: `${data.kpis.verified_users} users`,
+                    trendUp: true,
+                    color: 'pink'
+                }
+            ];
+
+            const container = document.getElementById('kpiCards');
+            container.innerHTML = kpis.map(kpi => `
+        <div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-surface-dark border border-slate-200 dark:border-[#283039] shadow-sm">
+            <div class="flex justify-between items-start">
+                <div class="p-2 rounded-lg bg-${kpi.color}-50 dark:bg-${kpi.color}-900/20 text-${kpi.color}-600 dark:text-${kpi.color}-400">
+                    <span class="material-symbols-outlined">${kpi.icon}</span>
+                </div>
+                <span class="flex items-center text-${kpi.trendUp ? 'emerald' : 'rose'}-500 bg-${kpi.trendUp ? 'emerald' : 'rose'}-50 dark:bg-${kpi.trendUp ? 'emerald' : 'rose'}-900/20 px-2 py-0.5 rounded text-xs font-bold">
+                    <span class="material-symbols-outlined text-sm mr-1">trending_${kpi.trendUp ? 'up' : 'down'}</span> ${kpi.trend}
+                </span>
+            </div>
+            <div class="mt-2">
+                <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">${kpi.label}</p>
+                <p class="text-slate-900 dark:text-white text-3xl font-bold tracking-tight">${kpi.value}</p>
+            </div>
+        </div>
+    `).join('');
+        }
+
+        function populateFunnel(data) {
+            const container = document.getElementById('funnelStages');
+            const stages = data.funnel.stages;
+
+            container.innerHTML = stages.map((stage, index) => {
+                const isBottleneck = stage.is_bottleneck || false;
+                const barColor = isBottleneck ? 'bg-red-500' : index === stages.length - 1 ? 'bg-emerald-500' : 'bg-primary';
+                const opacity = 100 - (index * 10);
+
+                return `
+            <div class="grid grid-cols-[120px_1fr_80px] items-center gap-4">
+                <div class="text-sm font-bold text-slate-600 dark:text-slate-300">${stage.name}</div>
+                <div class="relative h-10 w-full rounded-md bg-slate-100 dark:bg-[#283039] overflow-hidden">
+                    <div class="absolute top-0 left-0 h-full ${barColor}/${opacity} flex items-center pl-3" style="width: ${stage.percentage}%;">
+                        <span class="text-xs font-bold text-white whitespace-nowrap">${stage.percentage}% (${stage.count.toLocaleString()})</span>
+                    </div>
+                </div>
+                <div class="text-right text-xs font-bold ${stage.dropoff > 0 ? 'text-rose-500' : 'text-slate-400'}">
+                    ${stage.dropoff > 0 ? `-${stage.dropoff}%` : '-'}
+                </div>
+            </div>
+            ${isBottleneck ? `
+                <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-3 rounded">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-red-500 text-sm">warning</span>
+                        <span class="text-xs font-bold text-red-600 dark:text-red-400">BOTTLENECK: ${stage.dropoff}% drop-off identified</span>
+                    </div>
+                </div>
+            ` : ''}
+        `;
+            }).join('');
+        }
+
+        function populateABTest(data) {
+            const container = document.getElementById('abTestResults');
+            const { control, treatment, lift } = data.ab_test;
+
+            const liftColor = lift > 0 ? 'emerald' : 'red';
+            const liftIcon = lift > 0 ? 'trending_up' : 'trending_down';
+
+            container.innerHTML = `
+        <div>
+            <div class="flex justify-between mb-1">
+                <span class="text-sm font-semibold text-primary">Treatment Group</span>
+                <span class="text-sm font-bold text-primary">${treatment.conversion_rate}% CR</span>
+            </div>
+            <div class="w-full bg-slate-100 dark:bg-[#283039] rounded-full h-2.5">
+                <div class="bg-primary h-2.5 rounded-full" style="width: ${treatment.conversion_rate * 3}%"></div>
+            </div>
+            <div class="mt-1 text-xs text-slate-500">${treatment.chat_clicks}/${treatment.item_views} conversions</div>
+        </div>
+        <div>
+            <div class="flex justify-between mb-1">
+                <span class="text-sm font-semibold text-slate-500 dark:text-slate-400">Control Group</span>
+                <span class="text-sm font-bold text-slate-500 dark:text-slate-400">${control.conversion_rate}% CR</span>
+            </div>
+            <div class="w-full bg-slate-100 dark:bg-[#283039] rounded-full h-2.5">
+                <div class="bg-slate-400 dark:bg-slate-600 h-2.5 rounded-full" style="width: ${control.conversion_rate * 3}%"></div>
+            </div>
+            <div class="mt-1 text-xs text-slate-500">${control.chat_clicks}/${control.item_views} conversions</div>
+        </div>
+        <div class="mt-4 p-3 rounded-lg bg-${liftColor}-50 dark:bg-${liftColor}-900/20 border border-${liftColor}-200 dark:border-${liftColor}-900/50">
+            <div class="flex items-center justify-between">
+                <span class="text-sm font-bold text-${liftColor}-900 dark:text-${liftColor}-300">Lift</span>
+                <div class="flex items-center gap-1 text-${liftColor}-600 dark:text-${liftColor}-400">
+                    <span class="material-symbols-outlined text-sm">${liftIcon}</span>
+                    <span class="text-lg font-bold">${lift > 0 ? '+' : ''}${lift}%</span>
+                </div>
+            </div>
+        </div>
+    `;
+        }
+
+        function populateSegments(data) {
+            const container = document.getElementById('segmentChart');
+            const { high_engagement, medium_engagement, low_engagement } = data.segments;
+            const total = high_engagement + medium_engagement + low_engagement;
+
+            const highPct = (high_engagement / total * 100).toFixed(1);
+            const mediumPct = (medium_engagement / total * 100).toFixed(1);
+            const lowPct = (low_engagement / total * 100).toFixed(1);
+
+            container.innerHTML = `
+        <div class="relative size-40 rounded-full" style="background: conic-gradient(#10b981 0% ${highPct}%, #f59e0b ${highPct}% ${parseFloat(highPct) + parseFloat(mediumPct)}%, #ef4444 ${parseFloat(highPct) + parseFloat(mediumPct)}% 100%);">
+            <div class="absolute inset-4 rounded-full bg-white dark:bg-surface-dark flex items-center justify-center flex-col">
+                <span class="text-2xl font-bold">${total}</span>
+                <span class="text-xs text-slate-500">Users</span>
+            </div>
+        </div>
+        <div class="w-full mt-6 grid grid-cols-2 gap-4">
+            <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                <div>
+                    <p class="text-xs text-slate-500">High</p>
+                    <p class="text-sm font-bold">${highPct}%</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-orange-500"></div>
+                <div>
+                    <p class="text-xs text-slate-500">Medium</p>
+                    <p class="text-sm font-bold">${mediumPct}%</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div>
+                    <p class="text-xs text-slate-500">Low</p>
+                    <p class="text-sm font-bold">${lowPct}%</p>
+                </div>
+            </div>
+        </div>
+    `;
+        }
+
+        function populateVerification(data) {
+            const container = document.getElementById('verificationStatus');
+            const { verified, not_verified, percentage_verified } = data.verification;
+
+            container.innerHTML = `
+        <div class="space-y-4">
+            <div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-sm font-medium">Verified</span>
+                    <span class="text-sm font-bold text-emerald-600">${verified} users</span>
+                </div>
+                <div class="w-full bg-slate-100 dark:bg-[#283039] rounded-full h-3">
+                    <div class="bg-emerald-500 h-3 rounded-full" style="width: ${percentage_verified}%"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-sm font-medium">Not Verified</span>
+                    <span class="text-sm font-bold text-slate-500">${not_verified} users</span>
+                </div>
+                <div class="w-full bg-slate-100 dark:bg-[#283039] rounded-full h-3">
+                    <div class="bg-slate-400 h-3 rounded-full" style="width: ${100 - percentage_verified}%"></div>
+                </div>
+            </div>
+            <div class="pt-4 border-t border-slate-200 dark:border-[#283039]">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-primary">${percentage_verified}%</div>
+                    <div class="text-xs text-slate-500 mt-1">Verification Rate</div>
+                </div>
+            </div>
+        </div>
+    `;
+        }
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', loadDashboardData);
+    </script>
+</body>
+
+</html>
