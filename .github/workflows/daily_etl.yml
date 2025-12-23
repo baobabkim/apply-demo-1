@@ -12,6 +12,14 @@ on:
         description: 'Number of users to generate'
         required: false
         default: '1000'
+      test_mode:
+        description: 'Test mode (skip GCP/BigQuery)'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
 
 env:
   PYTHON_VERSION: '3.11'
@@ -38,38 +46,69 @@ jobs:
           pip install -r requirements.txt
       
       - name: Set up GCP credentials
+        if: github.event.inputs.test_mode != 'true'
         id: auth
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
       
       - name: Set up Cloud SDK
+        if: github.event.inputs.test_mode != 'true'
         uses: google-github-actions/setup-gcloud@v2
       
       - name: Generate synthetic data
         run: |
           NUM_USERS=${{ github.event.inputs.num_users || '1000' }}
-          echo "[*] Generating data for $NUM_USERS users..."
+          TEST_MODE=${{ github.event.inputs.test_mode || 'true' }}
+          
+          if [ "$TEST_MODE" = "true" ]; then
+            echo "[TEST MODE] Generating data for $NUM_USERS users (no BigQuery upload)..."
+          else
+            echo "[PRODUCTION MODE] Generating data for $NUM_USERS users..."
+          fi
+          
+          cd real
           python scripts/generate_data.py --users $NUM_USERS --output data
           echo "[OK] Data generation complete"
+          
+          echo "[*] Generated files:"
+          ls -lh data/
       
       - name: Load data to BigQuery
+        if: github.event.inputs.test_mode != 'true'
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
         run: |
           echo "[*] Loading data to BigQuery..."
+          cd real
           python scripts/load_data.py \
             --project-id ${{ secrets.GCP_PROJECT_ID }} \
             --dataset analytics \
             --data-dir data
           echo "[OK] Data loading complete"
       
+      - name: Test mode summary
+        if: github.event.inputs.test_mode == 'true'
+        run: |
+          echo "========================================="
+          echo "TEST MODE - Data Generated Successfully"
+          echo "========================================="
+          echo ""
+          echo "Generated data files are available as artifacts."
+          echo "To enable BigQuery upload, configure GCP credentials"
+          echo "and run with test_mode=false"
+          echo ""
+          echo "Next steps:"
+          echo "1. Download artifacts to review generated data"
+          echo "2. Follow docs/GCP_SETUP.md to configure credentials"
+          echo "3. Re-run workflow with test_mode=false"
+      
       - name: Upload data artifacts
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: generated-data-${{ github.run_number }}
-          path: data/*.csv
+          path: real/data/*.csv
           retention-days: 7
       
       - name: Notify on failure
