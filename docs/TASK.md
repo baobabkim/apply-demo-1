@@ -1,50 +1,38 @@
-# Project Tasks: Zero Cost & Zero Maintenance DA Portfolio
+# 분석 & 실험 수행 Task List
 
-## 1. 환경 설정 및 기초 공사 (Setup)
-- [ ] **GitHub Repository 초기화**
-    - [ ] `.gitignore` 설정 (Python, virtualenv, Data files)
-    - [ ] `README.md` 작성 (프로젝트 개요 및 아키텍처 다이어그램 포함)
-- [ ] **GCP (Google Cloud Platform) 설정**
-    - [ ] 새 프로젝트 생성 (e.g., `da-portfolio-mvp`)
-    - [ ] BigQuery API 활성화 (Sandbox 모드 확인)
-    - [ ] Service Account(SA) 생성 및 Key(JSON) 다운로드
-    - [ ] GitHub Repository Secrets 등록 (`GCP_SA_KEY`, `GCP_PROJECT_ID`)
+이 문서는 [PRD.md](./PRD.md)에 정의된 "C2C 마켓플레이스 유저 리텐션 향상" 프로젝트를 달성하기 위한 구체적인 실행 단계(Task)를 정의합니다.
 
-## 2. 데이터 생성 엔진 구현 (Data Generator)
-- [ ] **Python 프로젝트 구조 잡기**
-    - [ ] `requirements.txt` 작성 (`faker`, `pandas`, `pandas-gbq`)
-- [ ] **유저 데이터 생성 (`src/generator/users.py`)**
-    - [ ] Faker를 이용한 유저 프로필 생성 (ID, 가입일자, 지역, 성별 등)
-    - [ ] DataFrame 변환 및 검증
-- [ ] **로그 데이터 생성 (`src/generator/events.py`)**
-    - [ ] 유저 행동 패턴 정의 (Funnel: 홈 -> 상세 -> 가입/구매)
-    - [ ] Timestamp 랜덤 생성 (최근 30일 기준 등)
-    - [ ] A/B 테스트 그룹 할당 로직 구현
+## 1. 데이터 분석 준비 (Data Prep)
+- [ ] **분석 환경 구축**
+    - [ ] SQL 접속 권한 확인 및 Python 분석 환경(Jupyter Notebook 등) 세팅
+    - [ ] 데이터 사전에 따른 테이블 및 컬럼 확인 (`user_log`, `transaction`, `item_detail` 등)
 
-## 3. 데이터 웨어하우스 구축 (BigQuery)
-- [ ] **데이터셋 생성**
-    - [ ] `analytics` 데이터셋 생성 (US or Seoul Region)
-- [ ] **테이블 스키마 설계**
-    - [ ] `users` 테이블 스키마 정의 (Partitioning: 가입일자)
-    - [ ] `events` 테이블 스키마 정의 (Partitioning: 이벤트 발생일자)
-- [ ] **로컬 적재 테스트**
-    - [ ] Python 스크립트로 생성된 데이터를 BigQuery에 업로드 테스트
+## 2. 유저 행동 로그 분석 (Log Analysis) (PRD 4.1)
+- [ ] **전체 Funnel 시각화**
+    - [ ] 메인 홈 -> 검색 -> 상세 페이지 -> 채팅 버튼 클릭 -> 실제 채팅 발송 단계별 전환율 산출
+    - [ ] 단계별 이탈률(Drop-off rate) 계산 및 병목 구간 시각화
+- [ ] **이탈/잔존 유저 패턴 비교 분석**
+    - [ ] 이탈 그룹 vs 잔존 그룹의 행동적 차이(Feature) 도출 (예: 검색어 사용 여부, 이미지 조회 수)
+    - [ ] 통계적 유의성 검정 (T-test 등)
 
-## 4. 자동화 파이프라인 (ETL Automation)
-- [ ] **GitHub Actions 워크플로우 작성 (`.github/workflows/daily_etl.yml`)**
-    - [ ] Cron Schedule 설정 (매일 새벽 02:00 KST)
-    - [ ] Python 환경 셋업 및 의존성 설치
-    - [ ] 데이터 생성 스크립트 실행
-    - [ ] BigQuery 적재 (Authentication 처리)
-- [ ] **안정성 테스트**
-    - [ ] 워크플로우 수동 실행 (workflow_dispatch) 및 성공 여부 확인
+## 3. 리텐션 코호트 분석 (Cohort Analysis) (PRD 4.2)
+- [ ] **Aha-Moment 발굴**
+    - [ ] '동네 인증' 완료 여부에 따른 D+1, D+7, D+30 리텐션 비교
+    - [ ] 첫 거래 성공 여부에 따른 재방문 주기 및 리텐션 히트맵(Heatmap) 작성
+- [ ] **Core Action 정의**
+    - [ ] 리텐션과 상관관계가 가장 높은 핵심 선행 행동(Leading Indicator) 정의
 
-## 5. 분석 및 대시보드 (Analysis & BI)
-- [ ] **Looker Studio 연동**
-    - [ ] BigQuery 데이터 소스 연결
-    - [ ] KPI 대시보드 구성 (DAU, WAU, Conversion Rate)
-    - [ ] 필터 구현 (날짜, A/B 그룹)
-- [ ] **Google Colab 심화 분석**
-    - [ ] Colab 노트북 생성 및 BigQuery 연동
-    - [ ] 통계적 유의성 검정(Chi-square test) 코드 작성
-    - [ ] 리텐션 히트맵 시각화
+## 4. 신규 기능 구현 및 실험 설계 (Implementation & Experiment) (PRD 4.3 & 5)
+- [ ] **신뢰 지표 UI 기획 및 개발**
+    - [ ] '판매자 평균 응답 시간' 및 '매너 점수' 배지 디자인 및 프론트엔드 구현
+    - [ ] 백엔드 응답 시간 계산 로직 구현
+- [ ] **실험(A/B Test) 환경 셋업**
+    - [ ] 실험군(Target, 20%) / 대조군(Control, 20%) 분배 로직 구현
+    - [ ] 로그 트래킹 심기(Click Event: `click_chat_button`)
+
+## 5. 결과 분석 및 리포팅 (Reporting)
+- [ ] **실험 결과 모니터링**
+    - [ ] 실험 기간(2주) 동안의 주요 지표(CTR, CVR) 데일리 모니터링
+- [ ] **최종 성과 분석**
+    - [ ] 실험군 vs 대조군 성과 비교 및 통계적 유의성 검증 (P-value 확인)
+    - [ ] 결론 도출 및 후속 액션 아이템 제안

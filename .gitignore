@@ -1,16 +1,63 @@
-# Dependencies
-node_modules/
-.pnp
-.pnp.js
-
-# Testing
-coverage/
-
-# Production
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# Misc
-.DS_Store
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# Environment variables
 .env
-.npm
+.env.local
+
+# GCP credentials
+*.json
+!schemas/*.json
+service-account-key.json
+credentials.json
+
+# Data files
+*.csv
+*.parquet
+data/
+*.db
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Logs
 *.log
+logs/

@@ -1,0 +1,19 @@
+# Data Generation
+faker==22.0.0
+pandas==2.1.4
+numpy==1.26.3
+
+# Google Cloud
+google-cloud-bigquery==3.14.1
+google-auth==2.26.2
+
+# Data Analysis
+scipy==1.11.4
+statsmodels==0.14.1
+
+# Visualization
+matplotlib==3.8.2
+seaborn==0.13.1
+
+# Utilities
+python-dotenv==1.0.0
